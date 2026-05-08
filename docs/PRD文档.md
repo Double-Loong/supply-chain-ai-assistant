@@ -261,7 +261,7 @@
 - price（float）：单价
 - is_hot（int）：是否热销（0/1）
 
-**user.csv**（6万条）：
+**user.csv**（10万条）：
 
 - user_id（int）：用户标识
 - gender（string）：性别
@@ -358,10 +358,10 @@
 
 ### 联系方式
 
-- 项目仓库：https://github.com/[你的用户名]/supply-chain-ai-assistant
+- 项目仓库：https://github.com/Double-Loong/supply-chain-ai-assistant
 - 在线演示：[Streamlit Cloud链接]
 - 原型预览：[语雀/飞书链接]
-- 个人邮箱：[你的邮箱]
+- 个人邮箱：LoongLee10@163.com
 
 ---
 
