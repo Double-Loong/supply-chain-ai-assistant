@@ -35,18 +35,56 @@ y_train = train_df['target_7d']
 X_valid = valid_df[feature_cols]
 y_valid = valid_df['target_7d']
 
-# LightGBM模型训练
-model = lgb.LGBMRegressor(
-    objective='regression',
-    num_leaves=31,
-    learning_rate=0.05,
-    n_estimators=500,
-    random_state=42
+# 评估函数
+def evaluate(y_true, y_pred, model_name):
+    mae = mean_absolute_error(y_true, y_pred)
+    rmse = np.sqrt(mean_squared_error(y_true, y_pred))
+    mape = np.mean(np.abs((y_true - y_pred) / (y_true + 1))) * 100
+    return {'model': model_name, 'MAE': mae, 'RMSE': rmse, 'MAPE': mape}
+
+results = []
+
+# 基线模型1：朴素预测
+naive_pred = X_valid['lag_1'].values * 7
+results.append(evaluate(y_valid, naive_pred, "朴素预测(昨日*7)"))
+
+# 基线模型2：7日移动平均
+ma_pred = X_valid['rolling_mean_7'].values * 7
+results.append(evaluate(y_valid, ma_pred, "7日移动平均*7"))
+
+# 基线模型3：双周同期平均
+week_avg_pred = (X_valid['lag_7'].values + X_valid['lag_14'].values) / 2 * 7
+results.append(evaluate(y_valid, week_avg_pred, "双周历史同期平均"))
+
+# LightGBM 模型训练
+lgb_params = {
+    'objective': 'regression',
+    'metric': 'rmse',
+    'boosting_type': 'gbdt',
+    'num_leaves': 31,
+    'learning_rate': 0.05,
+    'feature_fraction': 0.9,
+    'bagging_fraction': 0.8,
+    'bagging_freq': 5,
+    'verbose': -1,
+    'random_state': 42
+}
+
+train_data = lgb.Dataset(X_train, label=y_train)
+valid_data = lgb.Dataset(X_valid, label=y_valid)
+
+model = lgb.train(
+    lgb_params,
+    train_data,
+    num_boost_round=1000,
+    valid_sets=[train_data, valid_data],
+    callbacks=[lgb.early_stopping(50), lgb.log_evaluation(100)]
 )
 
-model.fit(
-    X_train, y_train,
-    eval_set=[(X_valid, y_valid)],
-    eval_metric='mae',
-    verbose=50
-)
+# 模型预测
+lgb_pred = model.predict(X_valid, num_iteration=model.best_iteration)
+results.append(evaluate(y_valid, lgb_pred, "LightGBM"))
+
+# 保存模型
+import joblib
+joblib.dump(model, 'models/lgb_model.pkl')
