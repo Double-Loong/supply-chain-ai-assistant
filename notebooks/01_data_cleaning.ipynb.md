@@ -2,6 +2,7 @@
 # 文件名：01_data_cleaning.ipynb
 # 功能：原始订单、用户数据清洗 + 特征衍生 + 聚合生成建模数据集
 
+
 # 安装依赖（国内源，首次运行取消注释执行）
 # pip install pandas numpy matplotlib seaborn scikit-learn lightgbm -i https://pypi.tuna.tsinghua.edu.cn/simple
 
@@ -151,11 +152,6 @@ ax = category_sales.plot(kind='bar', color='steelblue')
 plt.title('品类累计销量分布', fontsize=14, pad=15)
 plt.ylabel('销量')
 plt.xticks(rotation=45)
-
-for i, v in enumerate(category_sales):
-    ax.text(i, v + max(category_sales)*0.01, f'{v:,}', ha='center', fontsize=9, weight='bold')
-
-plt.tight_layout()
 
 for i, v in enumerate(category_sales):
     ax.text(i, v + max(category_sales)*0.01, f'{v:,}', ha='center', fontsize=9, weight='bold')
