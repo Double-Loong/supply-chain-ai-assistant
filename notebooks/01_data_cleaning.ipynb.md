@@ -117,7 +117,7 @@ segment_daily.to_csv('segment_daily.csv', index=False, encoding='UTF-8-SIG')
 # ===================== 9. 周末特征补充 =====================
 daily_sales['is_weekend'] = (daily_sales['order_date'].dt.weekday >= 5).astype(int)
 
-# ===================== 10. 可视化分析（仅代码，无输出残留） =====================
+# ===================== 10. 可视化分析 =====================
 # 1. 整体每日销量趋势
 daily_total = daily_sales.groupby('order_date')['daily_qty'].sum().reset_index()
 daily_total['quarter'] = daily_total['order_date'].dt.to_period('Q')
