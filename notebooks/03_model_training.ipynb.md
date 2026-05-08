@@ -1,16 +1,13 @@
-# 📁 03_model_training.ipynb （模型训练）
-```markdown
 # 03 - 模型训练
-# 供应链销量预测 — 训练集/验证集拆分 + LightGBM建模
+# 供应链销量预测 — 数据集划分 & 模型训练
+
+## 功能说明
+1. 按时间顺序划分训练集、验证集（前80%训练，后20%验证）
+2. 筛选建模特征列，剔除无关字段
+3. 构建训练与验证特征矩阵、目标变量
+4. 预留接入传统时序基线模型与LightGBM模型训练接口
 
 ```python
-import pandas as pd
-import numpy as np
-from sklearn.metrics import mean_absolute_error, mean_squared_error
-import lightgbm as lgb
-import warnings
-warnings.filterwarnings('ignore')
-
 # 加载特征数据
 feature_df = pd.read_csv('features.csv')
 feature_df['order_date'] = pd.to_datetime(feature_df['order_date'])
