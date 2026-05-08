@@ -31,6 +31,7 @@ Python, pandas, LightGBM, Streamlit, Plotly, Jupyter
 
 ## 数据集说明
 本项目使用订单数据(order.csv)、用户数据(user.csv)，因文件过大未上传至GitHub
+因原始订单/用户数据文件超过100MB，本仓库仅提供**前100行样本数据**用于项目演示与运行。
 
 ## 联系方式
 LoongLee10@163.com 
