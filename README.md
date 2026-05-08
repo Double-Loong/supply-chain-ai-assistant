@@ -30,7 +30,7 @@ Python, pandas, LightGBM, Streamlit, Plotly, Jupyter
 供应链产品经理 |  AI产品经理（供应链方向） | 供应链计划/预测岗
 
 ## 数据集说明
-本项目使用订单数据(order.csv)、用户数据(user.csv)，因文件过大未上传至GitHub
+本项目使用订单数据(order.csv)、用户数据(user.csv)，因文件过大未上传至GitHub   
 因原始订单/用户数据文件超过100MB，本仓库仅提供**前100行样本数据**用于项目演示与运行。
 
 ## 联系方式
