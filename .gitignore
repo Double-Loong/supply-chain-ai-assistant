@@ -2,7 +2,6 @@
 order.csv
 user.csv
 daily_sales.csv
-*.csv
 *.xlsx
 *.xls
 *.parquet
