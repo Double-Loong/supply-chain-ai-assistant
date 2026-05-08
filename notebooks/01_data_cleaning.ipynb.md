@@ -4,6 +4,7 @@
 
 
 # 安装依赖（国内源，首次运行取消注释执行）
+```bash
 # pip install pandas numpy matplotlib seaborn scikit-learn lightgbm -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 import pandas as pd
@@ -13,7 +14,8 @@ import seaborn as sns
 from datetime import datetime, timedelta
 import warnings
 warnings.filterwarnings('ignore')
-
+```
+```python
 # ===================== 全局中文绘图配置 =====================
 plt.rcParams['font.sans-serif'] = ['SimHei', 'DejaVu Sans']
 plt.rcParams['axes.unicode_minus'] = False
@@ -157,3 +159,4 @@ for i, v in enumerate(category_sales):
     ax.text(i, v + max(category_sales)*0.01, f'{v:,}', ha='center', fontsize=9, weight='bold')
 
 plt.tight_layout()
+```
