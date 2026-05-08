@@ -1,10 +1,9 @@
 # 供应链智能预测项目 - 数据清洗与EDA
-# 文件名：01_data_cleaning.ipynb
 # 功能：原始订单、用户数据清洗 + 特征衍生 + 聚合生成建模数据集
 
 
-# 安装依赖（国内源，首次运行取消注释执行）
 ```bash
+# 安装依赖（国内源，首次运行取消注释执行）
 # pip install pandas numpy matplotlib seaborn scikit-learn lightgbm -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 import pandas as pd
