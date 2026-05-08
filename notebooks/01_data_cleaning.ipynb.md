@@ -1,0 +1,163 @@
+# 供应链智能预测项目 - 数据清洗与EDA
+# 文件名：01_data_cleaning.ipynb
+# 功能：原始订单、用户数据清洗 + 特征衍生 + 聚合生成建模数据集
+
+# 安装依赖（国内源，首次运行取消注释执行）
+# pip install pandas numpy matplotlib seaborn scikit-learn lightgbm -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from datetime import datetime, timedelta
+import warnings
+warnings.filterwarnings('ignore')
+
+# ===================== 全局中文绘图配置 =====================
+plt.rcParams['font.sans-serif'] = ['SimHei', 'DejaVu Sans']
+plt.rcParams['axes.unicode_minus'] = False
+
+# ===================== 1. 加载样本数据 =====================
+# 读取项目内样本CSV（后续GitHub只传样本，不改代码也能跑）
+order_df = pd.read_csv('order_sample.csv', encoding='UTF-8-SIG')
+user_df = pd.read_csv('user_sample.csv', encoding='UTF-8-SIG')
+
+# ===================== 2. 时间字段类型转换 =====================
+order_df['order_time'] = pd.to_datetime(order_df['order_time'])
+order_df['launch_date'] = pd.to_datetime(order_df['launch_date'])
+user_df['register_time'] = pd.to_datetime(user_df['register_time'])
+user_df['last_purchase_time'] = pd.to_datetime(user_df['last_purchase_time'])
+
+# ===================== 3. 时间维度特征衍生 =====================
+# 提取日期、年、月、周、星期、周末标记
+order_df['order_date'] = order_df['order_time'].dt.date
+order_df['year'] = order_df['order_time'].dt.year
+order_df['month'] = order_df['order_time'].dt.month
+order_df['week'] = order_df['order_time'].dt.isocalendar().week
+order_df['dayofweek'] = order_df['order_time'].dt.dayofweek  # 0=周一
+order_df['is_weekend'] = (order_df['dayofweek'] >= 5).astype(int)
+
+# ===================== 4. 数据清洗：只保留已交付有效订单 =====================
+order_clean = order_df[order_df['order_status'] == 'Delivered'].copy()
+
+# ===================== 5. 按日期+SKU聚合日销量数据 =====================
+daily_sales = order_clean.groupby([
+    'order_date', 'product_id', 'product_name', 
+    'category', 'brand', 'price', 'is_hot',
+    'product_region_level'
+]).agg({
+    'quantity': 'sum',           # 日销量
+    'amount': 'sum',             # 日销售额
+    'order_id': 'nunique',       # 每日订单数
+    'user_id': 'nunique'         # 每日购买用户数
+}).reset_index()
+
+# 重命名列
+daily_sales.columns = [
+    'order_date', 'product_id', 'product_name', 'category',
+    'brand', 'price', 'is_hot', 'product_region_level',
+    'daily_qty', 'daily_amount', 'daily_orders', 'daily_users'
+]
+
+# 日期转为datetime类型
+daily_sales['order_date'] = pd.to_datetime(daily_sales['order_date'])
+
+# 保存聚合后的建模基础数据
+daily_sales.to_csv('daily_sales.csv', index=False, encoding='UTF-8-SIG')
+
+# ===================== 6. 用户维度特征聚合 =====================
+user_features = order_clean.groupby('user_id').agg({
+    'quantity': 'sum',
+    'amount': 'sum',
+    'order_id': 'nunique',
+    'product_id': 'nunique'
+}).reset_index()
+
+user_features.columns = [
+    'user_id', 'user_total_qty', 'user_total_amount', 
+    'user_order_count', 'user_product_variety'
+]
+
+# 用户画像特征合并
+user_enriched = user_df.merge(user_features, on='user_id', how='left')
+
+# ===================== 7. 简易RFM & 用户分层 =====================
+user_enriched['recency'] = (pd.to_datetime('2025-01-01') - 
+                            user_enriched['last_purchase_time']).dt.days
+user_enriched['frequency'] = user_enriched['total_purchase_times']
+user_enriched['monetary'] = user_enriched['total_purchase_amount']
+
+# 按消费频次做用户分层
+user_enriched['user_segment'] = pd.cut(
+    user_enriched['frequency'], 
+    bins=[0, 1, 5, 20, 999],
+    labels=['新客', '低频', '中频', '高频']
+)
+
+# ===================== 8. 用户分层日维度聚合 =====================
+daily_user_segment = order_clean.merge(
+    user_enriched[['user_id', 'user_segment']], 
+    on='user_id', how='left'
+)
+
+segment_daily = daily_user_segment.groupby(['order_date', 'user_segment']).agg({
+    'quantity': 'sum'
+}).unstack(fill_value=0)
+
+segment_daily.columns = [f'segment_{c[1]}_qty' for c in segment_daily.columns]
+segment_daily = segment_daily.reset_index()
+segment_daily['order_date'] = pd.to_datetime(segment_daily['order_date'])
+
+# 保存用户分层日数据
+segment_daily.to_csv('segment_daily.csv', index=False, encoding='UTF-8-SIG')
+
+# ===================== 9. 周末特征补充 =====================
+daily_sales['is_weekend'] = (daily_sales['order_date'].dt.weekday >= 5).astype(int)
+
+# ===================== 10. 可视化分析（仅代码，无输出残留） =====================
+# 1. 整体每日销量趋势
+daily_total = daily_sales.groupby('order_date')['daily_qty'].sum().reset_index()
+daily_total['quarter'] = daily_total['order_date'].dt.to_period('Q')
+quarterly_max = daily_total.loc[daily_total.groupby('quarter')['daily_qty'].idxmax()]
+
+plt.figure(figsize=(14, 5))
+plt.plot(daily_total['order_date'], daily_total['daily_qty'], color='#1f77b4', linewidth=1.2)
+plt.title('每日总销量趋势（标注季度峰值）', fontsize=14, pad=15)
+plt.xlabel('日期')
+plt.ylabel('销量')
+plt.xticks(rotation=45)
+
+for _, row in quarterly_max.iterrows():
+    date = row['order_date']
+    qty = int(row['daily_qty'])
+    plt.annotate(
+        f'{qty}',
+        xy=(date, qty),
+        xytext=(0, 10),
+        textcoords='offset points',
+        ha='center',
+        fontsize=9,
+        color='red',
+        weight='bold',
+        bbox=dict(boxstyle='round,pad=0.2', fc='yellow', alpha=0.7)
+    )
+
+plt.tight_layout()
+
+# 2. 品类销量分布
+category_sales = daily_sales.groupby('category')['daily_qty'].sum().sort_values(ascending=False)
+plt.figure(figsize=(10, 5))
+ax = category_sales.plot(kind='bar', color='steelblue')
+plt.title('品类累计销量分布', fontsize=14, pad=15)
+plt.ylabel('销量')
+plt.xticks(rotation=45)
+
+for i, v in enumerate(category_sales):
+    ax.text(i, v + max(category_sales)*0.01, f'{v:,}', ha='center', fontsize=9, weight='bold')
+
+plt.tight_layout()
+
+for i, v in enumerate(category_sales):
+    ax.text(i, v + max(category_sales)*0.01, f'{v:,}', ha='center', fontsize=9, weight='bold')
+
+plt.tight_layout()
