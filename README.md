@@ -23,7 +23,7 @@ Python, pandas, LightGBM, Streamlit, Plotly, Jupyter
 ## 项目阶段
 1. **数据清洗**：40万订单+10万用户数据清洗处理，构建日维度SKU销量表
 2. **特征工程**：30+维特征（滞后、滑动窗口、用户分层）
-3. **模型训练**：传统方法对比验 vs 证LightGBM
+3. **模型训练**：传统方法对比  vs 验证LightGBM
 4. **产品封装**： PRD文档+ Figma高保真原型 + Streamlit交互仪表盘
 
 ## 适合岗位
