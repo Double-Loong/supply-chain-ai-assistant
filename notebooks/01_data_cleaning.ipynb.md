@@ -23,7 +23,6 @@ plt.rcParams['font.sans-serif'] = ['SimHei', 'DejaVu Sans']
 plt.rcParams['axes.unicode_minus'] = False
 
 # ===================== 1. 加载样本数据 =====================
-# 读取项目内样本CSV（后续GitHub只传样本，不改代码也能跑）
 order_df = pd.read_csv('order_sample.csv', encoding='UTF-8-SIG')
 user_df = pd.read_csv('user_sample.csv', encoding='UTF-8-SIG')
 
@@ -68,7 +67,7 @@ daily_sales.columns = [
 daily_sales['order_date'] = pd.to_datetime(daily_sales['order_date'])
 
 # 保存聚合后的建模基础数据
-daily_sales.to_csv('daily_sales.csv', index=False, encoding='UTF-8-SIG')
+daily_sales.to_csv('daily_sales.csv', index=False)
 
 # ===================== 6. 用户维度特征聚合 =====================
 user_features = order_clean.groupby('user_id').agg({
@@ -114,7 +113,7 @@ segment_daily = segment_daily.reset_index()
 segment_daily['order_date'] = pd.to_datetime(segment_daily['order_date'])
 
 # 保存用户分层日数据
-segment_daily.to_csv('segment_daily.csv', index=False, encoding='UTF-8-SIG')
+segment_daily.to_csv('segment_daily.csv', index=False)
 
 # ===================== 9. 周末特征补充 =====================
 daily_sales['is_weekend'] = (daily_sales['order_date'].dt.weekday >= 5).astype(int)
