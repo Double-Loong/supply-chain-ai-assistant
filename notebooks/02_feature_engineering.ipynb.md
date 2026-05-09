@@ -83,4 +83,4 @@ feature_df = feature_df.merge(segment_daily, on='order_date', how='left')
 feature_df = feature_df.fillna(0)
 
 # 保存特征表
-feature_df.to_csv('features.csv', index=False, encoding='utf-8-sig')
+feature_df.to_csv('features.csv', index=False)
