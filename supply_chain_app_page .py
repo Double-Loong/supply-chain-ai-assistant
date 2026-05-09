@@ -125,7 +125,7 @@ def page_overview():
     col3.metric("库存预警SKU", "12", "-3")
     col4.metric("AI建议采纳率", "76%", "↑8%")
 
-    # 销量趋势图（修复：生成稳定的模拟数据）
+    # 销量趋势图
     col_a, col_b = st.columns([2, 1])
     with col_a:
         st.subheader("销量趋势（近30天）")
@@ -161,7 +161,7 @@ def page_overview():
         - SKU-2034 🔴 库存紧张
         """)
 
-    # ===================== 品类销量分布（无-0.5·无报错·完美对齐） =====================
+    # ===================== 品类销量分布 =====================
     st.subheader("品类销量分布")
     
     category_sales = pd.DataFrame({
@@ -186,7 +186,7 @@ def page_overview():
 
     st.plotly_chart(fig2, use_container_width=True)
 
-# ===================== 页面3：预测分析（最终版，完全按截图实现） =====================
+# ===================== 页面3：预测分析 =====================
 def page_forecast():
     # 侧边栏导航
     with st.sidebar:
@@ -350,7 +350,7 @@ def page_forecast():
         for advice in advice_list:
             st.success(advice)
 
-# ===================== 页面4：补货建议（已按你的建议改造） =====================
+# ===================== 页面4：补货建议 =====================
 def page_replenish():
     # 侧边栏导航
     with st.sidebar:
@@ -375,7 +375,7 @@ def page_replenish():
     </div>
     """, unsafe_allow_html=True)
 
-    # 【你的建议】：增加品类、SKU选择栏
+    # 品类、SKU选择栏
     col_top1, col_top2 = st.columns(2)
     with col_top1:
         category_list = sorted(daily_sales['category'].unique())
@@ -446,7 +446,7 @@ def page_replenish():
         </div>
         """, unsafe_allow_html=True)
 
-# ===================== 页面5：模型效果报告（按你的要求改造） =====================
+# ===================== 页面5：模型效果报告 =====================
 def page_report():
     # 侧边栏导航
     with st.sidebar:
