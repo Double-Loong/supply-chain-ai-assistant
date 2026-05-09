@@ -1,4 +1,3 @@
-%%writefile C:\Users\86182\Desktop\supply_chain_app_page.py
 import streamlit as st
 import pandas as pd
 import plotly.express as px
