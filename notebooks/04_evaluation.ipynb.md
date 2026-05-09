@@ -85,4 +85,3 @@ for cat in top3_categories:
                       callbacks=[lgb.early_stopping(50)])
     lgb_pred = model.predict(X_valid)
     
-    # 输出结果 & 绘图（略，完整代码已包含）
