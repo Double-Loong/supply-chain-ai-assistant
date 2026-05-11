@@ -6,9 +6,9 @@
 基于40万订单数据，用LightGBM构建SKU级需求预测模型，较传统方法误差降低37.5%，并独立完成产品化封装。
 
 ## 快速体验
-- **在线演示**：[Streamlit Cloud链接]（需科学上网）
-- **原型预览**：[GitHub Pages链接] 或 直接查看 `/prototype/` 目录图片
-- **文档详情**：[语雀/飞书文档链接]
+- **在线演示**：https://supply-chain-ai-assistant-mc9xopirgh8gitawrhrdqu.streamlit.app/
+- **原型预览**：https://github.com/Double-Loong/supply-chain-ai-assistant
+- **文档详情**：https://github.com/Double-Loong/supply-chain-ai-assistant
 
 ## 核心成果
 | 指标 | 传统方法(7日移动平均) | LightGBM-AI | 提升 |
