@@ -1,4 +1,4 @@
-<img width="1536" height="1024" alt="img_v3_0211g_80899761-c0ce-4ba2-ac00-1cfc0000817g" src="https://github.com/user-attachments/assets/0d067c72-6b0e-404f-99e2-895046fc464b" /># 智链AI - 供应链智能预测助手 产品原型说明文档
+# 智链AI - 供应链智能预测助手 产品原型说明文档
 ## 文档说明
 本文档为**智链AI 供应链智能预测助手**产品原型结构说明，包含5大核心页面架构、布局规范、模块功能、设计系统。
 
@@ -65,8 +65,8 @@
 
 ---
 
-## 3. 预测分析页（核心功能页）
-![预测分析页](./prototype/预测分析页.png)
+## 3. 预测分析页（核心功能页）：
+<img width="1402" height="1122" alt="image" src="https://github.com/user-attachments/assets/d8d8be4b-fcd5-403d-8724-d6db1246ce9d" />
 ### 操作控制面板
 - SKU下拉选择器：支持品类/SKU编码/商品名称模糊搜索
 - 预测周期单选：7天 / 14天 / 30天（默认7天）
@@ -89,8 +89,9 @@
 
 ---
 
-## 4. 补货建议页（业务闭环页）
-![补货建议页](./prototype/补货建议页.png)
+## 4. 补货建议页（业务闭环页）：
+<img width="1402" height="1122" alt="image" src="https://github.com/user-attachments/assets/200fbc19-ea1e-477e-bff8-5fed3e4cddba" />
+
 ### 基础配置区
 - SKU&品类选择器
 - 参数配置：当前库存、安全库存天数、预测周期
@@ -112,8 +113,8 @@
 
 ---
 
-## 5. 模型报告页（技术展示页）
-![模型报告页](./prototype/模型报告页.png)
+## 5. 模型报告页（技术展示页）：
+<img width="1402" height="1122" alt="image" src="https://github.com/user-attachments/assets/2ac94f97-90cc-40e4-89f7-c80f4bba8f14" />
 ### 筛选区
 - 品类选择器、预测时间区间筛选
 
