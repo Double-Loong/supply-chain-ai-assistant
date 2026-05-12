@@ -359,8 +359,8 @@
 ### 联系方式
 
 - 项目仓库：https://github.com/Double-Loong/supply-chain-ai-assistant
-- 在线演示：[Streamlit Cloud链接]
-- 原型预览：[语雀/飞书链接]
+- 在线演示：https://supply-chain-ai-assistant-mc9xopirgh8gitawrhrdqu.streamlit.app
+- 原型预览：https://github.com/Double-Loong/supply-chain-ai-assistant/blob/main/prototype/figma%E5%8E%9F%E5%9E%8B%E5%9B%BE.md
 - 个人邮箱：LoongLee10@163.com
 
 ---
